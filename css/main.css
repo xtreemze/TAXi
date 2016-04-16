@@ -177,17 +177,27 @@ background-size: 850%;
 
 .tree1{
 
-transform: translate3d(-891px, -475px, 100px) rotateX(-90deg);
+transform: translate3d(230px, -475px, 100px) rotateX(-90deg);
 }
 
 .tree2{
 
-transform: translate3d(-1300px, -475px, 100px) rotateX(-90deg);
+transform: translate3d(-900px, -475px, 100px) rotateX(-90deg);
 }
 
 .tree3{
 
-transform: translate3d(-2800px, -475px, 100px) rotateX(-90deg);
+transform: translate3d(-2150px, -475px, 100px) rotateX(-90deg);
+}
+
+.tree4 {
+ transform: translate3d(-900px, -475px, 100px) rotateX(-90deg);
+ z-index:20;
+}
+
+.tree5 {
+ transform: translate3d(-1900px, -475px, 100px) rotateX(-90deg);
+ z-index:20;
 }
 
 .taxiCar, .taxiFull {
