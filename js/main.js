@@ -18,7 +18,7 @@ var wealth      = 800;
 var food        = 4;
 var currentDate = new Date(2009, 4, 11, 7);
 var day         = 1;
-var Step        = 15;
+var Step        = 16;
 
 //GAME SOUND // Individual sounds are specified here. Sounds included inside one ogg file.
 var sound = new Howl({
