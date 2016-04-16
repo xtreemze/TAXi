@@ -18,7 +18,7 @@ var wealth      = 800;
 var food        = 4;
 var currentDate = new Date(2009, 4, 11, 7);
 var day         = 1;
-var Step        = 5;
+var Step        = 15;
 
 //GAME SOUND // Individual sounds are specified here. Sounds included inside one ogg file.
 var sound = new Howl({
@@ -67,11 +67,11 @@ var nextDay = function (days){
         BlackOut();
         $(".taxiFull").fadeOut(0);
         loaded = false;
-        $(".background2").css('right', '20px');
-        setTimeout(function(){ ShowTime();  }, 5000);
+        $(".background2").css('right', '-60px');
+        setTimeout(function(){ ShowTime();  }, 3000);
     } else if (currentDate.getHours() === 11 && alive === true) {
         StopTaxi();
-        BlackOut();
+        
 
         $(".transaction").html("<span class='red'>Lunch time!</span>").delay(4000).fadeIn().delay(1800).fadeOut();
 
@@ -110,11 +110,10 @@ function hideMenu(e) {
     e.preventDefault();
 }
 
-$(".con2").fadeOut(0);
-setTimeout(function(){
+
     ShowTime();
     sound.play('sleep');
-}, 2000);
+
 
 var check = function () {
     if (health < 1 || food < 1 || wealth < 1) {alive = false; health = 0;}
@@ -292,10 +291,9 @@ var cubeMove = function(pixels, duration){
 // START COMMANDS
 // clearConsole();
 // report();
-$(".taxiFull").fadeOut(0);
-$(".passengerDrop").fadeOut(0);
+$(".taxiFull").fadeOut(1);
+$(".passengerDrop").fadeOut(1);
 
 // STORY
         $(".transaction").html("<span class='black'>Day "+day+"</span></br><span style='font-size:20px'></br></br></br>Food for "+food+" days.</span>").delay(4000).fadeIn().delay(8000).fadeOut();
-
 loop();

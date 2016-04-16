@@ -255,7 +255,7 @@ transform: translate3d(-2800px, -475px, 100px) rotateX(-90deg);
 
 .background2{
   position: absolute;
-  width: 3550px;
+  width: 3953px;
   height: 200px;
   border-bottom-color: rgb(206, 207, 201);
   padding-top: 15px;
@@ -264,7 +264,7 @@ transform: translate3d(-2800px, -475px, 100px) rotateX(-90deg);
   overflow: visible;
   transform: translate3d(10px, 200px, 547px) rotateX(90deg);
   -ms-transform: translate3d(10px, 200px, 547px) rotateX(90deg);
-  right:20px;
+  right:-60px;
   -webkit-transform-style: preserve-3d;
   -webkit-backface-visibility:hidden;
   will-change: right;
@@ -476,19 +476,19 @@ transform: translate3d(-14870px, -2461px, 780px) rotateX(-90deg);
 }
 
 .storeCube {
-  right:4000px;
+  right:1000px;
 }
 
 .houseCube {
-  right:5000px;
+  right:4000px;
 }
 
 .stationCube{
-  right:6000px;
+  right:4000px;
 }
 
 .officeCube{
-  right:7000px;
+  right:3000px;
 }
 
 
