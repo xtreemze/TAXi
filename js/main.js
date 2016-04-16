@@ -6,9 +6,9 @@ var stopped = true;
 var loaded  = false;
 var wait    = false;
 
-var BlackOut = function () { $(".con2").fadeOut(2000);};
-var ShowTime = function () { $(".con2").fadeIn(3000);};
-var taxiDie  = function () { $(".taxi").fadeOut(3000);};
+var BlackOut = function () { $(".con2").fadeOut(200);};
+var ShowTime = function () { $(".con2").fadeIn(300);};
+var taxiDie  = function () { $(".taxi").fadeOut(300);};
 // END GUI
 
 // START INITIAL GAME VARIABLE DECLARATION
@@ -48,15 +48,21 @@ var loop        = function () {
     }, 1000);
 };
 
+
+// report
+report = function(){
+    $(".transaction").html("<span class='black'>Day "+day+"</span><br><span style='font-size:20px'><br><br><br>Food for "+food+" days. <span class='red'>Gas: L.100</span><span>").delay(20).fadeIn().delay(8000).fadeOut();
+};
+
 //GAME TIME FUNCTIONS
-var nextDay = function (days){
+nextDay = function (days){
     
     if(currentDate.getHours() > 14 && alive === true){
         StopTaxi();
         currentDate.setDate(currentDate.getDate()+days);
         currentDate.setHours(7);
         
-        $(".transaction").html("<span class='black'>Day "+day+"</span></br><span style='font-size:20px'></br></br></br>Food for "+food+" days. <span class='red'>Gas: L.100</span><span>").delay(6000).fadeIn().delay(8000).fadeOut();
+        
         // Play honk sound
         sound.play('sleep');  
 
@@ -73,7 +79,7 @@ var nextDay = function (days){
         StopTaxi();
         
 
-        $(".transaction").html("<span class='red'>Lunch time!</span>").delay(4000).fadeIn().delay(1800).fadeOut();
+        $(".transaction").html("<span class='red'>Lunch time!</span>").delay(2).fadeIn().delay(1800).fadeOut();
 
         // Play eat sound
         sound.play('eat');        
@@ -99,7 +105,7 @@ var addMinutes = function (minutesAdd) {
 // CLEAR CONSOLE, REPORT, YES AND NO TEST
     var type         = function (message) {cons.innerHTML="<p>"+message+"</p>"+cons.innerHTML;};
     // var report       = function () {
-    // stats.innerHTML  ="STATUS DAY# "+day+"</br>"+currentDate.toLocaleString()+"</br>" + "Health: " + health + "% </br> Food for " + food + " days.</br>" ;};
+    // stats.innerHTML  ="STATUS DAY# "+day+"<br>"+currentDate.toLocaleString()+"<br>" + "Health: " + health + "% <br><br> Food for " + food + " days.<br>" ;};
     // var clearConsole = function () {cons.innerHTML=" ";};
 
 // START INITIAL FUNCTION DECLARATION
@@ -295,5 +301,5 @@ $(".taxiFull").fadeOut(1);
 $(".passengerDrop").fadeOut(1);
 
 // STORY
-        $(".transaction").html("<span class='black'>Day "+day+"</span></br><span style='font-size:20px'></br></br></br>Food for "+food+" days.</span>").delay(4000).fadeIn().delay(8000).fadeOut();
+ report();
 loop();
