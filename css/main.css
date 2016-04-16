@@ -162,6 +162,7 @@ body {
 
  .taxiCar, .taxiFull, .rider, .passengerDrop, .storeF, .storeR, .storeL, .officeF, .officeR, .officeL, .sidewalk, .sidewalk2, .clouds, .trees {
   background-image: url(../img/sprite.png);
+
 }
 
 .trees{
@@ -254,7 +255,7 @@ transform: translate3d(-2800px, -475px, 100px) rotateX(-90deg);
 
 .background2{
   position: absolute;
-  width: 12000px;
+  width: 3550px;
   height: 200px;
   border-bottom-color: rgb(206, 207, 201);
   padding-top: 15px;
