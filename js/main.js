@@ -81,7 +81,7 @@ nextDay = function (days) {
 		
 	} else if (currentDate.getHours() === 11 && alive === true) {
 		StopTaxi();
-		$(".transaction").html("<span class='red'>Lunch time!</span>").delay(2).fadeIn().delay(1800).fadeOut();
+		$(".transaction").html("<span class='red'>Almuerzo</span>").delay(2).fadeIn().delay(1800).fadeOut();
 		// Play eat sound
 		sound.play('eat');
 		addMinutes(60);
@@ -104,7 +104,7 @@ var addMinutes = function (minutesAdd) {
 };
 // CLEAR CONSOLE, REPORT, YES AND NO TEST
 var type = function (message) {
-	cons.innerHTML = "<p>" + message + "</p>" + cons.innerHTML;
+	//cons.innerHTML = "<p>" + message + "</p>" + cons.innerHTML;
 };
 // START INITIAL FUNCTION DECLARATION
 document.addEventListener("contextmenu", hideMenu, false);
