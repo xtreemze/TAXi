@@ -56,12 +56,12 @@ var loop = function () {
 };
 // report
 report = function () {
-	$(".transaction").html("<span class='black'>Day " + day + "</span><br><span>"+currentDate.getHours()+" hours.</span><p class='subInfo'>Food: " +food +" days. <span class='red'>Cash: L."+wealth+"</span><p>").delay(20).fadeIn().delay(8000).fadeOut();
+	$(".transaction").html("<span class='black'>Day " + day + "</span><br><span>" + currentDate.getHours() + " hours.</span><p class='subInfo'>Food: " + food + " days. <span class='red'>Cash: L." + wealth + "</span><p>").delay(20).fadeIn().delay(8000).fadeOut();
 };
 //GAME TIME FUNCTIONS
 nextDay = function (days) {
 	if (currentDate.getHours() > 14 && alive === true) {
-	    BlackOut();
+		BlackOut();
 		StopTaxi();
 		currentDate.setDate(currentDate.getDate() + days);
 		currentDate.setHours(7);
@@ -70,7 +70,7 @@ nextDay = function (days) {
 		wealth -= 100;
 		health = 99;
 		day = day + 1;
-	    $(".taxiFull").fadeOut(0);
+		$(".taxiFull").fadeOut(0);
 		loaded = false;
 		$(".background2").css('right', '-60px');
 		//Show 3 seconds later
@@ -78,7 +78,7 @@ nextDay = function (days) {
 			ShowTime();
 			report();
 		}, 3000);
-		
+
 	} else if (currentDate.getHours() === 11 && alive === true) {
 		StopTaxi();
 		$(".transaction").html("<span class='red'>Almuerzo</span>").delay(2).fadeIn().delay(1800).fadeOut();
@@ -91,7 +91,7 @@ nextDay = function (days) {
 		//Show 3 seconds later
 		setTimeout(function () {
 			ShowTime();
-		    report();
+			report();
 		}, 3500);
 
 	}
@@ -269,7 +269,7 @@ taxiClick = function () {
 	}
 	if (stopped === true && wait === false && alive === true) {
 		GoTaxi();
-		// Function to drop off Passenger // Passenger drop       
+		// Function to drop off Passenger // Passenger drop
 	} else if (loaded === true && stopped === false && wait === false && alive === true) {
 		wait = true;
 		StopTaxi();
