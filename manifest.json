@@ -1,9 +1,0 @@
-{
-  "name": "TAXi",
-  "short_name": "TAXi",
-  "start_url": "/?homescreen=1",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#00B0B9",
-  "theme_color": "#00B0B9"
-}
