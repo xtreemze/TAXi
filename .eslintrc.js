@@ -10,7 +10,7 @@ module.exports = {
     "browser": true,
     // "es6": true
   },
-  "extends": "airbnb",
+  "extends": "airbnb/legacy",
   // "rules": {
   //   	"indent": [ "error", "tab" ],
   //   "linebreak-style": ["error", "windows"],

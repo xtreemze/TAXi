@@ -3,47 +3,45 @@
 // let cons = document.getElementById('con1')
 // let stats = document.getElementById('stats')
 // let con2 = document.getElementById('con2')
-let stopped = true;
-let loaded = false;
-let wait = false;
+var stopped = true;
+var loaded = false;
+var wait = false;
 // START INITIAL GAME VARIABLE DECLARATION
-let alive = true;
-let health = 100;
-let wealth = 800;
-let food = 4;
+var alive = true;
+var health = 100;
+var wealth = 800;
+var food = 4;
 const currentDate = new Date(2009, 4, 11, 7);
-let day = 1;
-let Step = 18;
+var day = 1;
+var Step = 18;
 // GAME SOUND // Individual sounds are specified here. Sounds included inside one ogg file.
 const sound = new Howl({
   urls: ['aud/sounds.ogg'],
-  sprite: {
-    door: [0, 730],
-    honk: [2180, 1220],
-    eat: [6540, 2570],
-    sleep: [10900, 4360],
-    cash: [4360, 680],
-    stop: [26720, 2180],
-    wrong: [29450, 410],
-    zoom: [32720, 1640],
-    jump: [34900, 130],
-    leave: [33270, 1090],
-    start: [37090, 2180],
-    drive: [17450, 4360, {
-      loop: true,
-    }],
-  },
+  honk: [2180, 1220],
+  eat: [6540, 2570],
+  sleep: [10900, 4360],
+  cash: [4360, 680],
+  stop: [26720, 2180],
+  wrong: [29450, 410],
+  zoom: [32720, 1640],
+  jump: [34900, 130],
+  leave: [33270, 1090],
+  start: [37090, 2180],
+  drive: [17450, 4360, {
+    loop: true,
+  }],
+},
 });
 // Function to make the taxi Go! Repositions buildings and pedestrians and gives the illusion  of movement.
 const GoTaxi = function goT() {
-  if (stopped === true) $('.taxi').removeClass('stop').stop().addClass('drive'); // Animates cab on drive
+  if(stopped === true) $('.taxi').removeClass('stop').stop().addClass('drive'); // Animates cab on drive
   stopped = false;
   $('.background2').stop().animate({
     right: '-=' + parseInt(225000 / 2.01, 10),
   }, 1000000, 'linear');
-  let cubeArray = ['.storeCube', '.officeCube']; // Reposition buildings
-  for (let i = cubeArray.length - 1; i >= 0; i--) {
-    if (parseInt($(cubeArray[i]).css('right'), 10) < -1500) $(cubeArray[i]).stop().css('right', Math.ceil((Math.random() + Math.random()) * 20) * 300 + 2400 + 'px');
+  const cubeArray = ['.storeCube', '.officeCube']; // Reposition buildings
+  for(let i = cubeArray.length - 1; i >= 0; i--) {
+    if(parseInt($(cubeArray[i]).css('right'), 10) < -1500) $(cubeArray[i]).stop().css('right', Math.ceil((Math.random() + Math.random()) * 20) * 300 + 2400 + 'px');
   }
   cubeMove('-=' + 20000 * 1.17 + 'px', 100000); // Animates Buildings
   goLive(); // Repositions and animates Pedestrians
@@ -52,7 +50,7 @@ const GoTaxi = function goT() {
 // When the taxi stops.
 const stopTaxi = function stopping() {
   $('.taxi').removeClass('drive').stop().addClass('stop'); // $(".taxi").stop().animate({bottom:"84px"}, 500)
-  if (stopped === false) { // stops pedestrians, buildings and road from moving
+  if(stopped === false) { // stops pedestrians, buildings and road from moving
     $('.background2').stop(true).animate({
       right: '-=' + parseInt(112.5 / 2.01, 10),
     }, 500, 'linear');
@@ -68,7 +66,7 @@ const stopTaxi = function stopping() {
     stopped = true;
     sound.stop().stop().play('stop');
   }
-  if (stopped === true && loaded === false && parseInt($('.storeCube').css('right'), 10) > 5 && parseInt($('.storeCube').css('right'), 10) < 480 && wealth > 200 && food < 15) { // Buying food at the store
+  if(stopped === true && loaded === false && parseInt($('.storeCube').css('right'), 10) > 5 && parseInt($('.storeCube').css('right'), 10) < 480 && wealth > 200 && food < 15) { // Buying food at the store
     $('.transaction').html('<span class=\'red\'>L.200</span>').fadeIn().delay(200).fadeOut();
     food++;
     food++;
@@ -78,9 +76,9 @@ const stopTaxi = function stopping() {
     setTimeout(function () {
       $('.transaction').html('<span class=\'black\'>L.' + wealth + '</span>').fadeIn().delay(200).fadeOut();
     }, 1600);
-  } else if (wealth < 200) {
+  } else if(wealth < 200) {
     // console.log("You don't have enough wealth to buy food.");
-  } else if (food > 14) {
+  } else if(food > 14) {
     // console.log("You have too much food!");
   }
 };
@@ -106,7 +104,7 @@ const taxiDie = function Die() {
 // GAME LOOP WILL STOP WHEN FALSE
 const loop = function looping() {
   setInterval(function internalLoop() {
-    if (stopped === false) {
+    if(stopped === false) {
       addMinutes(Step);
     }
   }, 1000);
@@ -117,7 +115,7 @@ const report = function inform() {
 };
 // GAME TIME FUNCTIONS
 let nextDay = function passTime(days) {
-  if (currentDate.getHours() > 14 && alive === true) {
+  if(currentDate.getHours() > 14 && alive === true) {
     blackOut();
     stopTaxi();
     currentDate.setDate(currentDate.getDate() + days);
@@ -135,7 +133,7 @@ let nextDay = function passTime(days) {
       showTime();
       report();
     }, 3000);
-  } else if (currentDate.getHours() === 11 && alive === true) {
+  } else if(currentDate.getHours() === 11 && alive === true) {
     stopTaxi();
     $('.transaction').html('<span class=\'red\'>Almuerzo</span>').delay(2).fadeIn().delay(1800).fadeOut();
     // Play eat sound
@@ -162,16 +160,16 @@ function hideMenu(e) {
 showTime();
 sound.play('sleep');
 const check = function () {
-  if (health < 1 || food < 1 || wealth < 1) {
+  if(health < 1 || food < 1 || wealth < 1) {
     alive = false;
     health = 0;
   }
-  if (alive === false) {
-    for (Step === 18; Step > 0; Step = Step - 18) {
-      if (health < 1) {
+  if(alive === false) {
+    for(Step === 18; Step > 0; Step = Step - 18) {
+      if(health < 1) {
         // console.log("Ultimately, your poor mental and physical health have caused your body to fail. You survived for " + day + " days.");
       }
-      if (food < 1) {
+      if(food < 1) {
         // console.log("You were unable to feed yourself and have died of starvation. You survived for " + day + " days.");
       }
       taxiDie();
@@ -188,10 +186,10 @@ const addMinutes = function timePlus(minutesAdd) {
 const passengerClick = function () {
   // If the taxi is unoccupied and not waiting for customers. Will load passenger.
   const dist2cab = parseInt(parseInt($(this).css('right'), 10) * 1.1 - 50, 10);
-  if (loaded === false && alive === true && wait === false && dist2cab < 1300) {
+  if(loaded === false && alive === true && wait === false && dist2cab < 1300) {
     wait = true;
     // Play honk sound
-    if (stopped === false) stopTaxi();
+    if(stopped === false) stopTaxi();
     sound.play('zoom');
     // Passenger runs and enters taxi after jumping.
     $(this).animate({
@@ -237,9 +235,9 @@ const passengerClick = function () {
       sound.play('door');
     }, dist2cab + 800);
     // What to do when taxi is occupied and passenger clicked on.
-  } else if (loaded === true && alive === true) {
+  } else if(loaded === true && alive === true) {
     // if the cab is stopped and occupied
-    if (stopped === true) {
+    if(stopped === true) {
       $(this).animate({
         bottom: '+=20px',
       }, {
@@ -275,8 +273,8 @@ const passengerClick = function () {
     // Play wrong sound
     sound.play('jump').play('wrong');
     // What to do if taxi is clicked  vacant and not waiting for customers. If driving or stopped.
-  } else if (loaded === false && alive === true && wait === false) {
-    if (stopped === false) {
+  } else if(loaded === false && alive === true && wait === false) {
+    if(stopped === false) {
       $(this).stop().animate({
         bottom: '+=20px',
         right: '-=23',
@@ -315,15 +313,15 @@ const passengerClick = function () {
 $('.rider').mousedown(passengerClick);
 // On Click on Taxi
 const taxiClick = function () {
-  if (wait === true) {
+  if(wait === true) {
     // type("Be polite and wait for your client to enter the cab!")
     // Play jump and wrong sound
     sound.play('wrong');
   }
-  if (stopped === true && wait === false && alive === true) {
+  if(stopped === true && wait === false && alive === true) {
     GoTaxi();
     // Function to drop off Passenger // Passenger drop
-  } else if (loaded === true && stopped === false && wait === false && alive === true) {
+  } else if(loaded === true && stopped === false && wait === false && alive === true) {
     wait = true;
     stopTaxi();
     $('.taxiFull').fadeOut();
@@ -352,22 +350,22 @@ const taxiClick = function () {
     setTimeout(function delayLeave() {
       sound.play('leave');
     }, 1200);
-  } else if (stopped === false && wait === false && alive === true) {
+  } else if(stopped === false && wait === false && alive === true) {
     stopTaxi();
   }
 };
 $('.taxi').mousedown(taxiClick);
 // Function to move the pedestrians and relocate them after they pass the cab
 let goLive = function live() {
-  for (let pedestrians = 5; pedestrians >= 0; pedestrians--) {
-    if (parseInt($('.passenger' + [pedestrians]).css('right'), 10) > -100 && stopped === false) {
+  for(let pedestrians = 5; pedestrians >= 0; pedestrians--) {
+    if(parseInt($('.passenger' + [pedestrians]).css('right'), 10) > -100 && stopped === false) {
       $('.passenger' + [pedestrians]).animate({
         right: '-=20000px',
       }, {
         duration: 100000,
         easing: 'linear',
       });
-    } else if (stopped === false) {
+    } else if(stopped === false) {
       $('.passenger' + [pedestrians]).css('right', Math.ceil(Math.random() * 100) * 50 + 1800 + 'px').fadeIn(0).animate({
         right: '-=20000px',
       }, {
