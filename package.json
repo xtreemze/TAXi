@@ -19,12 +19,6 @@
     "url": "https://github.com/xtreemze/TAXi/issues"
   },
   "homepage": "https://github.com/xtreemze/TAXi#readme",
-  "globals": {
-    "$": true,
-    "Materialize": true,
-    "jQuery": true,
-    "intervalID": true
-  },
   "dependencies": {
 
   },

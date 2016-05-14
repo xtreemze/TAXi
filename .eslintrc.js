@@ -3,29 +3,38 @@
 // !minOnSave
 // minOnSave: false
 module.exports = {
+  "ecmaVersion": 5,
   "ecmaFeatures": {
     "jsx": false,
     "modules": false,
     "arrowFunctions": false,
-    "classes": true,
-    "spread": true,
+    "classes": false,
+    "spread": false,
+    "impliedStrict": false
   },
   "env": {
     "browser": true,
-    // "es6": true
+    "jquery": true,
+    "es6": false
   },
   "extends": "airbnb",
-  // "rules": {
-  // 	"indent": [ "error", "tab" ],
-  // 	"linebreak-style": [ "error", "windows" ],
-  // 	"quotes": [ "error", "single" ],
-  // 	"semi": [ "error", "always" ]
-  // },
+  "rules": {
+    // "indent": [ "error", "tab" ],
+    // "linebreak-style": [ "error", "windows" ],
+    // "quotes": [ "error", "single" ],
+    // "semi": [ "error", "always" ]
+    "newline-per-chained-call": ["off"],
+    "no-var": ["off"],
+    "max-len": ["off", 100, 4],
+    "radix": ["off"],
+    "prefer-template": ["off"],
+    "prefer-arrow-callback": ["off"],
+    "func-names": ["off"],
+    "no-use-before-define": ["off"]
+  },
   "globals": {
-    "$": true,
-    "Materialize": true,
-    "jQuery": true,
+    "Materialize": false,
     "intervalID": true,
-    "Howl": true
+    "Howl": false
   }
 };
