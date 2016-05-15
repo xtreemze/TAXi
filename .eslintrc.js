@@ -18,6 +18,8 @@ module.exports = {
     "es6": false
   },
   "extends": "airbnb",
+  "installedESLint": true,
+  "plugins": ["react"],
   "rules": {
     // "indent": [ "error", "tab" ],
     // "linebreak-style": [ "error", "windows" ],
