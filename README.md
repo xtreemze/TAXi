@@ -4,4 +4,4 @@ MIT Open Source
 
 ## Quick start
 
-[Play here](http://htmlpreview.github.io/?https://cdn.rawgit.com/xtreemze/TAXi/master/index.html)
+[Play here](http://xtreemze.github.io/TAXi)
