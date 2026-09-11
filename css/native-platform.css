@@ -13,6 +13,10 @@ dialog.modal-backdrop {
   overflow: auto;
 }
 
+dialog.modal-backdrop:not([open]) {
+  display: none;
+}
+
 dialog.modal-backdrop[open] {
   display: grid;
   place-items: center;
