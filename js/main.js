@@ -122,6 +122,7 @@
       day: 1,
       minute: CONFIG.startMinute,
       cash: 450,
+      dayStartCash: 450,
       fuel: 75,
       energy: 90,
       meals: 2,
@@ -205,32 +206,44 @@
       }
     }
 
+    stopHum() {
+      if (!this.hum || !this.context || !this.humGain) return;
+      const oldHum = this.hum;
+      const oldGain = this.humGain;
+      const now = this.context.currentTime;
+      oldGain.gain.cancelScheduledValues(now);
+      oldGain.gain.setValueAtTime(Math.max(0.0001, oldGain.gain.value), now);
+      oldGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+      oldHum.stop(now + 0.09);
+      this.hum = null;
+      this.humGain = null;
+    }
+
     setDriving(driving) {
-      const context = this.ensure();
-      if (!context || !this.enabled) return;
-      if (driving && !this.hum) {
-        this.hum = context.createOscillator();
-        this.humGain = context.createGain();
-        this.hum.type = 'sawtooth';
-        this.hum.frequency.value = 62;
-        this.humGain.gain.value = 0.012;
-        this.hum.connect(this.humGain).connect(context.destination);
-        this.hum.start();
-      } else if (!driving && this.hum) {
-        const oldHum = this.hum;
-        const oldGain = this.humGain;
-        oldGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.08);
-        oldHum.stop(context.currentTime + 0.09);
-        this.hum = null;
-        this.humGain = null;
+      if (!driving) {
+        this.stopHum();
+        return;
       }
+      if (!this.enabled || this.hum) return;
+      const context = this.ensure();
+      if (!context) return;
+      this.hum = context.createOscillator();
+      this.humGain = context.createGain();
+      this.hum.type = 'sawtooth';
+      this.hum.frequency.value = 62;
+      this.humGain.gain.value = 0.012;
+      this.hum.connect(this.humGain).connect(context.destination);
+      this.hum.start();
     }
 
     toggle() {
+      if (this.enabled) this.stopHum();
       this.enabled = !this.enabled;
       safeWrite(CONFIG.soundKey, this.enabled ? '1' : '0');
-      if (!this.enabled) this.setDriving(false);
-      else this.ensure();
+      if (this.enabled) {
+        this.ensure();
+        if (state.mode === 'playing' && state.driving && !state.paused) this.setDriving(true);
+      }
       renderSound();
     }
   }
@@ -274,6 +287,7 @@
       if (!saved || saved.version !== CONFIG.version || saved.mode !== 'playing') return null;
       saved.driving = false;
       saved.paused = false;
+      if (!Number.isFinite(saved.dayStartCash)) saved.dayStartCash = saved.cash - (saved.dayRevenue || 0);
       return saved;
     } catch (_) {
       return null;
@@ -562,10 +576,10 @@
     if (state.driving) {
       const weather = currentWeather();
       const traffic = trafficFactor();
-      const speed = 0.155 * weather.speed * traffic;
+      const speed = 0.38 * weather.speed * traffic;
       state.world += 0.115 * weather.speed;
-      state.fuel = clamp(state.fuel - 0.22 * weather.fuel, 0, 100);
-      state.energy = clamp(state.energy - 0.065 * weather.energy, 0, 100);
+      state.fuel = clamp(state.fuel - 0.45 * weather.fuel, 0, 100);
+      state.energy = clamp(state.energy - 0.2 * weather.energy, 0, 100);
 
       if (state.trip && !state.trip.arrived) {
         state.trip.progress = Math.min(state.trip.distance, state.trip.progress + speed);
@@ -620,19 +634,18 @@
     state.driving = false;
     sound.setDriving(false);
 
-    const beforeCost = state.cash;
     state.cash -= CONFIG.nightlyCost;
-    let mealNote = 'Dinner/restored energy';
+    let mealNote = 'Dinner restored your energy';
     if (state.meals > 0) {
       state.meals -= 1;
       state.energy = 92;
     } else {
       state.energy = 58;
       state.rating = clamp(state.rating - 0.12, 0, 5);
-      mealNote = 'No meal — energy and rating penalty';
+      mealNote = 'No meal — energy and rating were penalized';
     }
 
-    const profit = beforeCost - (beforeCost - state.dayRevenue) - CONFIG.nightlyCost;
+    const profit = state.cash - state.dayStartCash;
     const body = `
       <p>Shift ${state.day} is closed. Operating costs are deducted every night, so revenue alone is not enough — keep enough cash for tomorrow.</p>
       <div class="summary-grid">
@@ -643,9 +656,18 @@
         <div><span>Rating</span><strong>${state.rating.toFixed(1)} ★</strong></div>
         <div><span>Streak</span><strong>${state.streak}</strong></div>
       </div>
-      <p>${mealNote}. Net shift result after the nightly cost: <strong>${money(profit)}</strong>.</p>`;
+      <p>${mealNote}. Net shift result including service purchases and nightly cost: <strong>${money(profit)}</strong>.</p>`;
 
     sound.cue('day');
+
+    if (state.cash < -100) {
+      endGame('Out of business', 'Nightly operating costs pushed the taxi beyond its available credit.');
+      return;
+    }
+    if (state.rating <= 0.5) {
+      endGame('License suspended', 'Your end-of-day passenger rating fell below the level required to receive new fares.');
+      return;
+    }
 
     if (state.day >= CONFIG.days) {
       finishCampaign(body);
@@ -653,8 +675,7 @@
     }
 
     showModal(`Day ${state.day} complete`, 'Shift closed', body, [
-      { label: 'Start next day', primary: true, action: startNextDay },
-      { label: 'How to play', action: openHelp }
+      { label: 'Start next day', primary: true, action: startNextDay }
     ]);
   }
 
@@ -664,6 +685,7 @@
     state.minute = CONFIG.startMinute;
     state.dayRevenue = 0;
     state.dayFares = 0;
+    state.dayStartCash = state.cash;
     state.offers = [];
     state.trip = null;
     state.nextOfferMinute = CONFIG.startMinute + 3;
@@ -689,8 +711,7 @@
       : `<p>You completed the week, but finished below the ${money(CONFIG.targetCash)} target. A tighter fare mix and fewer empty kilometers can close the gap.</p>`;
 
     showModal('Five-day week complete', reachedTarget ? 'You made it' : 'Week complete', `${result}${summaryBody}<div class="summary-grid"><div><span>Final score</span><strong>${finalScore.toLocaleString('en-US')}</strong></div><div><span>Best score</span><strong>${Math.max(previousHigh, finalScore).toLocaleString('en-US')}</strong></div></div>`, [
-      { label: 'Play another week', primary: true, action: startNewGame },
-      { label: 'Review controls', action: openHelp }
+      { label: 'Play another week', primary: true, action: startNewGame }
     ]);
     render();
   }
@@ -705,8 +726,7 @@
     if (finalScore > previousHigh) safeWrite(CONFIG.highScoreKey, String(finalScore));
     safeRemove(CONFIG.saveKey);
     showModal('Shift over', title, `<p>${message}</p><div class="summary-grid"><div><span>Day reached</span><strong>${state.day}</strong></div><div><span>Fares</span><strong>${state.totalFares}</strong></div><div><span>Cash</span><strong>${money(state.cash)}</strong></div><div><span>Score</span><strong>${finalScore.toLocaleString('en-US')}</strong></div></div>`, [
-      { label: 'Try again', primary: true, action: startNewGame },
-      { label: 'How to play', action: openHelp }
+      { label: 'Try again', primary: true, action: startNewGame }
     ]);
     render();
   }
@@ -787,6 +807,7 @@
     dom.mealButton.disabled = state.mode !== 'playing' || state.paused || state.driving || state.meals < 1 || state.energy >= 98;
     dom.buyMealButton.disabled = state.mode !== 'playing' || state.paused || state.driving || state.cash < CONFIG.mealCost || state.meals >= 5;
     dom.pauseButton.disabled = state.mode !== 'playing';
+    dom.helpButton.disabled = state.mode !== 'playing';
     dom.pauseButton.setAttribute('aria-pressed', String(state.paused));
     dom.pauseButton.textContent = state.paused ? 'Resume' : 'Pause';
     dom.serviceSign.textContent = state.minute >= CONFIG.closeMinute - 60 ? 'LAST HOUR' : trafficFactor() < 1 ? 'RUSH HOUR' : 'OPEN STREET';
@@ -850,9 +871,10 @@
   }
 
   function openHelp() {
-    const wasModalOpen = !dom.modalBackdrop.hidden;
-    resumeAfterHelp = state.mode === 'playing' && !state.paused;
-    if (state.mode === 'playing') state.paused = true;
+    if (state.mode !== 'playing') return;
+    resumeAfterHelp = !state.paused;
+    state.paused = true;
+    sound.setDriving(false);
     render();
     showModal('How to play', 'Drive smart, not just fast', `
       <p><strong>TAXi</strong> is a five-day resource game. Passengers pay by distance, but empty driving still burns fuel and the clock never stops.</p>
@@ -866,11 +888,14 @@
       </ul>
       <p>Weather changes each day. Rain slows traffic but lifts fares; heat drains energy faster. Rush hour also slows trips.</p>`, [
       {
-        label: wasModalOpen ? 'Back' : 'Close',
+        label: 'Close',
         primary: true,
         action: () => {
           hideModal();
-          if (resumeAfterHelp && state.mode === 'playing') state.paused = false;
+          if (resumeAfterHelp) {
+            state.paused = false;
+            sound.setDriving(state.driving);
+          }
           render();
         }
       }
@@ -907,8 +932,7 @@
     const actions = [];
     if (saved) actions.push({ label: 'Continue shift', primary: true, action: () => continueGame(saved) });
     actions.push({ label: saved ? 'New week' : 'Start shift', primary: !saved, action: startNewGame });
-    actions.push({ label: 'How to play', action: openHelp });
-    showModal('TAXi', 'Street Shift', `<p>A compact survival-management game inside a tiny CSS 3D city. Pick profitable fares, limit empty kilometers, manage resources and make it through five shifts.</p>${savedCopy}<div class="summary-grid"><div><span>Week target</span><strong>${money(CONFIG.targetCash)}</strong></div><div><span>Best score</span><strong>${best.toLocaleString('en-US')}</strong></div></div>`, actions);
+    showModal('TAXi', 'Street Shift', `<p>A compact survival-management game inside a tiny CSS 3D city. Pick profitable fares, limit empty kilometers, manage resources and make it through five shifts.</p>${savedCopy}<div class="summary-grid"><div><span>Week target</span><strong>${money(CONFIG.targetCash)}</strong></div><div><span>Best score</span><strong>${best.toLocaleString('en-US')}</strong></div></div><p><strong>Quick controls:</strong> Space drives/stops, Enter chooses a fare or drops off, R refuels, E eats, B buys a meal, and H opens the full help while playing.</p>`, actions);
   }
 
   function togglePause() {
@@ -954,7 +978,10 @@
         openHelp();
       } else if (event.key === 'Escape' && !dom.modalBackdrop.hidden && state.mode === 'playing') {
         hideModal();
-        if (resumeAfterHelp) state.paused = false;
+        if (resumeAfterHelp) {
+          state.paused = false;
+          sound.setDriving(state.driving);
+        }
         render();
       }
     });
