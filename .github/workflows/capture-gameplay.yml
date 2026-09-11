@@ -1,0 +1,84 @@
+name: Capture gameplay screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'index.html'
+      - 'css/**'
+      - 'js/**'
+      - '.github/workflows/capture-gameplay.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install isolated browser tooling
+        run: |
+          mkdir -p /tmp/taxi-capture docs/screenshots
+          cd /tmp/taxi-capture
+          npm init -y >/dev/null
+          npm install --save-exact playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve static game
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/taxi-http.log 2>&1 &
+          echo $! > /tmp/taxi-http.pid
+          sleep 2
+
+      - name: Capture desktop and mobile gameplay
+        run: |
+          cat > /tmp/taxi-capture/capture.cjs <<'EOF'
+          const { chromium } = require('playwright');
+          const path = require('path');
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+
+            async function capture(name, viewport, waitMs) {
+              const context = await browser.newContext({ viewportSize: viewport, reducedMotion: 'reduce' });
+              const page = await context.newPage();
+              await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle' });
+              const start = page.getByRole('button', { name: /start shift|new week/i }).first();
+              await start.click();
+              await page.waitForTimeout(waitMs);
+              await page.screenshot({
+                path: path.join(process.env.GITHUB_WORKSPACE, 'docs', 'screenshots', name),
+                fullPage: true
+              });
+              await context.close();
+            }
+
+            await capture('gameplay-desktop.png', { width: 1440, height: 900 }, 4200);
+            await capture('gameplay-mobile.png', { width: 430, height: 932 }, 5200);
+            await browser.close();
+          })();
+          EOF
+          cd /tmp/taxi-capture
+          node capture.cjs
+
+      - name: Commit refreshed screenshots
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/screenshots/gameplay-desktop.png docs/screenshots/gameplay-mobile.png
+          if git diff --cached --quiet; then
+            echo 'Screenshots are unchanged.'
+          else
+            git commit -m 'docs: refresh gameplay screenshots'
+            git push
+          fi

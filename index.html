@@ -1,104 +1,158 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>TAXi</title>
-	<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.6" />
-	<meta name="theme-color" content="#60DEFF" />
-	<link rel="icon" type="image/ico" href="favicon.ico" />
-	<!-- Add to homescreen for Chrome on Android -->
-	<link rel="stylesheet" href="css/normalize.min.css">
-	<link rel="stylesheet" href="css/main.min.css"> </head>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101c2d">
+  <meta name="description" content="TAXi — a compact street-shift survival game built with static HTML, CSS 3D transforms and vanilla JavaScript.">
+  <meta property="og:title" content="TAXi — street-shift survival">
+  <meta property="og:description" content="Pick fares, manage fuel and energy, and finish a five-day taxi week in a tiny CSS 3D city.">
+  <meta property="og:image" content="docs/preview.svg">
+  <title>TAXi — Street Shift</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="css/main.css">
+</head>
 <body>
-	<div class="header">
-		<h1>TAXi</h1> </div>
-	<div id="con2" class="con2">
-		<div class="background"></div>
-		<div id="perspective" class="perspective">
-			<div id="background2" class="background2">
-				<div class="sidewalk"></div>
-				<div class="sidewalk2"></div>
-				<div class="clouds cloud1"></div>
-				<div class="clouds cloud2"></div>
-				<div class="clouds cloud3"></div>
-				<div class="clouds cloud4"></div>
-				<div class="clouds cloud5"></div>
-				<div class="clouds cloud6"></div>
-				<div class="clouds cloud7"></div>
-				<div class="clouds cloud8"></div>
-				<div class="clouds cloud9"></div>
-				<div class="trees tree1"></div>
-				<div class="trees tree2"></div>
-				<div class="trees tree3"></div>
-				<div class="trees tree4"></div>
-				<div class="trees tree5"></div>
-			</div>
-			<!--
-                <div class="houseCube cubes">
-                <div class="houseL">Left</div>
-                <div class="houseR">Right</div>
-                <div class="houseF">Front</div>
-                </div>
+  <div class="app" id="app">
+    <header class="hud" aria-label="Shift status">
+      <a class="brand" href="#game" aria-label="TAXi home">
+        <span class="brand-mark" aria-hidden="true">TAXi</span>
+        <span class="brand-sub">Street Shift</span>
+      </a>
 
-                <div class="stationCube cubes">
-                <div class="stationL">Left</div>
-                <div class="stationR">Right</div>
-                <div class="stationF">Front</div>
-                </div>
- -->
-			<div class="officeCube cubes">
-				<div class="officeL"></div>
-				<div class="officeR"></div>
-				<div class="officeF"></div>
-			</div>
-			<div class="storeCube cubes">
-				<div class="storeL"></div>
-				<div class="storeR"></div>
-				<div class="storeF"></div>
-			</div>
-			<div class="passenger0 rider"></div>
-			<div class="passenger1 rider"></div>
-			<div class="passenger2 rider"></div>
-			<div class="passenger3 rider"></div>
-			<div class="passenger4 rider"></div>
-			<div class="passenger5 rider"></div>
-			<div class="passengerDrop"></div>
-			<div class="taxi stop">
-				<div class="taxiFull"></div>
-				<div class="taxiCar"></div>
-				<div class="transaction"></div>
-			</div>
-		</div>
-	</div>
-	<!--
-        <div id="con1" class="con1"></div> -->
-	<!--
-        <div id="stats" class="stats"></div> -->
-	<!--
-                <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-                <script src="js/helper.js"></script>
-                <script src="js/vendor/howler.js"></script>
+      <div class="meters" aria-live="polite">
+        <div class="meter"><span class="meter-label">Day</span><strong id="dayValue">1 / 5</strong></div>
+        <div class="meter"><span class="meter-label">Time</span><strong id="timeValue">07:00</strong></div>
+        <div class="meter"><span class="meter-label">Cash</span><strong id="cashValue">L 450</strong></div>
+        <div class="meter meter-bar"><span class="meter-label">Fuel</span><strong id="fuelValue">75%</strong><i><b id="fuelBar"></b></i></div>
+        <div class="meter meter-bar"><span class="meter-label">Energy</span><strong id="energyValue">90%</strong><i><b id="energyBar"></b></i></div>
+        <div class="meter"><span class="meter-label">Meals</span><strong id="mealValue">2</strong></div>
+        <div class="meter"><span class="meter-label">Rating</span><strong id="ratingValue">3.0 ★</strong></div>
+      </div>
 
-                <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
-                <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/easing/EasePack.min.js"></script>
-                <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/jquery.gsap.min.js"></script>
-                <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js"></script>
-                <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSRulePlugin.min.js"></script>
-                <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/AttrPlugin.min.js"></script>
--->
-	<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-	<script src="js/helper.min.js"></script>
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/latest/howler.min.js"></script> -->
-	<script src="js/vendor/howler.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/easing/EasePack.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/jquery.gsap.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSRulePlugin.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/AttrPlugin.min.js"></script>
-	<script src="js/main.min.js"></script>
+      <div class="hud-actions">
+        <button class="icon-button" id="soundButton" type="button" aria-pressed="false" title="Toggle sound (M)">Sound</button>
+        <button class="icon-button" id="pauseButton" type="button" aria-pressed="false" title="Pause (P)">Pause</button>
+        <button class="icon-button" id="helpButton" type="button" title="How to play (H)">Help</button>
+      </div>
+    </header>
+
+    <main id="game" class="game" tabindex="-1">
+      <section class="scene" aria-label="Taxi street scene">
+        <div class="sky" aria-hidden="true">
+          <div class="sun"></div>
+          <div class="cloud cloud-a"></div>
+          <div class="cloud cloud-b"></div>
+          <div class="cloud cloud-c"></div>
+          <div class="horizon"></div>
+        </div>
+
+        <div class="world" id="world" aria-hidden="true">
+          <div class="city-strip" id="cityStrip"></div>
+          <div class="street-furniture" id="streetFurniture"></div>
+          <div class="road">
+            <div class="road-edge road-edge-back"></div>
+            <div class="lane-marks" id="laneMarks"></div>
+            <div class="road-edge road-edge-front"></div>
+          </div>
+          <div class="service-sign" id="serviceSign"></div>
+          <div class="destination" id="destinationMarker"><span>DESTINATION</span></div>
+          <div class="taxi" id="taxi">
+            <div class="taxi-shadow"></div>
+            <div class="taxi-body">
+              <div class="taxi-roof"><span>TAXI</span></div>
+              <div class="taxi-cabin">
+                <div class="window window-front"></div>
+                <div class="window window-rear"></div>
+              </div>
+              <div class="taxi-bumper"></div>
+              <div class="taxi-wheel wheel-front"><i></i></div>
+              <div class="taxi-wheel wheel-rear"><i></i></div>
+              <div class="taxi-light"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="passenger-lane" id="passengerLane" aria-label="Available fares"></div>
+
+        <div class="scene-copy">
+          <p class="eyebrow" id="weatherValue">Clear morning</p>
+          <h1 id="sceneTitle">Start your shift</h1>
+          <p id="sceneMessage">Stop for riders, choose a fare, then drive it to the destination before the clock and your resources run out.</p>
+        </div>
+
+        <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
+      </section>
+
+      <aside class="dispatch" aria-label="Dispatch and controls">
+        <div class="dispatch-head">
+          <div>
+            <p class="eyebrow">Dispatch</p>
+            <h2 id="dispatchTitle">Looking for fares</h2>
+          </div>
+          <span class="status-chip" id="statusChip">Stopped</span>
+        </div>
+
+        <div class="trip-card" id="tripCard">
+          <div class="trip-empty" id="tripEmpty">
+            <strong>No passenger aboard</strong>
+            <span>Available riders appear on the sidewalk. Better fares usually mean longer trips.</span>
+          </div>
+          <div class="trip-active" id="tripActive" hidden>
+            <div class="trip-route">
+              <span id="tripPassenger">Passenger</span>
+              <strong id="tripDestination">Centro</strong>
+              <span id="tripFare">L 0 fare</span>
+            </div>
+            <div class="progress" aria-label="Trip progress"><b id="tripProgress"></b></div>
+            <div class="trip-meta">
+              <span id="tripDistance">0.0 km left</span>
+              <span id="tripPatience">On time</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="primary-controls">
+          <button class="control control-primary" id="driveButton" type="button"><span id="driveLabel">Drive</span><kbd>Space</kbd></button>
+          <button class="control" id="actionButton" type="button" disabled><span id="actionLabel">Pick a fare</span><kbd>Enter</kbd></button>
+        </div>
+
+        <div class="service-controls">
+          <button class="service" id="refuelButton" type="button"><span>Refuel +25%</span><small>L 90 · 12 min</small><kbd>R</kbd></button>
+          <button class="service" id="mealButton" type="button"><span>Eat a meal</span><small>+30 energy · 18 min</small><kbd>E</kbd></button>
+          <button class="service" id="buyMealButton" type="button"><span>Buy meal</span><small>L 55 · +1 meal</small><kbd>B</kbd></button>
+        </div>
+
+        <div class="shift-goal">
+          <div class="goal-copy"><span>Week target</span><strong id="goalValue">L 3,000</strong></div>
+          <div class="goal-track"><b id="goalBar"></b></div>
+          <p id="goalCopy">Build cash and rating through five shifts. Daily operating costs are deducted after closing.</p>
+        </div>
+
+        <div class="legend">
+          <span><i class="legend-dot fare-low"></i>Short</span>
+          <span><i class="legend-dot fare-mid"></i>Standard</span>
+          <span><i class="legend-dot fare-high"></i>Premium</span>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <span>Static HTML · CSS 3D transforms · Vanilla JavaScript</span>
+      <a href="https://github.com/xtreemze/TAXi">Source</a>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <p class="eyebrow" id="modalEyebrow">TAXi</p>
+      <h2 id="modalTitle">Street Shift</h2>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </section>
+  </div>
+
+  <noscript><p class="noscript">TAXi requires JavaScript to run.</p></noscript>
+  <script src="js/main.js"></script>
 </body>
-
 </html>
