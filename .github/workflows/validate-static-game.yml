@@ -13,16 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: Check JavaScript syntax and static runtime contract
         run: |
-          node --check js/main.js
+          npm run check
           node <<'EOF'
           const fs = require('fs');
           const html = fs.readFileSync('index.html', 'utf8');
@@ -36,6 +36,11 @@ jobs:
           if (externalScripts.length || externalStyles.length) {
             throw new Error('Production game must not load external scripts or stylesheets.');
           }
+          const forbidden = ['jquery', 'gsap', 'howler'];
+          const runtime = `${html}\n${fs.readFileSync('css/main.css', 'utf8')}\n${fs.readFileSync('js/main.js', 'utf8')}`.toLowerCase();
+          for (const dependency of forbidden) {
+            if (runtime.includes(dependency)) throw new Error(`Legacy runtime dependency detected: ${dependency}`);
+          }
           EOF
 
       - name: Install isolated browser tooling
@@ -43,7 +48,7 @@ jobs:
           mkdir -p /tmp/taxi-test
           cd /tmp/taxi-test
           npm init -y >/dev/null
-          npm install --save-exact playwright@1.55.0
+          npm install --ignore-scripts --no-package-lock --save-exact playwright@1.63.0
           npx playwright install --with-deps chromium
 
       - name: Serve repository
