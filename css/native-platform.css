@@ -1,0 +1,76 @@
+/* Native platform primitives layered over the core TAXi presentation. */
+
+dialog.modal-backdrop {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  padding: 18px;
+  background: transparent;
+  color: inherit;
+  overflow: auto;
+}
+
+dialog.modal-backdrop[open] {
+  display: grid;
+  place-items: center;
+}
+
+dialog.modal-backdrop::backdrop {
+  background: rgba(1, 6, 12, .74);
+  backdrop-filter: blur(14px);
+}
+
+progress.progress,
+progress.goal-track {
+  display: block;
+  width: 100%;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+progress.progress {
+  height: 9px;
+  margin: 15px 0 8px;
+  background: rgba(255,255,255,.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+progress.goal-track {
+  height: 5px;
+  margin: 8px 0;
+  background: rgba(255,255,255,.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+progress.progress::-webkit-progress-bar,
+progress.goal-track::-webkit-progress-bar {
+  background: rgba(255,255,255,.08);
+  border-radius: 99px;
+}
+
+progress.progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  border-radius: 99px;
+  transition: inline-size .18s linear;
+}
+
+progress.progress::-moz-progress-bar {
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  border-radius: 99px;
+}
+
+progress.goal-track::-webkit-progress-value {
+  background: var(--yellow);
+  border-radius: 99px;
+}
+
+progress.goal-track::-moz-progress-bar {
+  background: var(--yellow);
+  border-radius: 99px;
+}
