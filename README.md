@@ -25,6 +25,8 @@ Then open `http://localhost:4173`.
 
 The original TAXi prototype already had the right central idea: the taxi moves through a pseudo-3D roadside world, riders can be picked up and dropped off, time passes, fares earn cash, food matters, and roadside spending competes with income. Street Shift turns those isolated interactions into one legible game economy.
 
+**Production design authority:** [docs/GAME-DESIGN.md](docs/GAME-DESIGN.md) defines the product goals, numbered requirements, state/loop diagrams, balancing framework, release gates and implementation sequencing. Active development is coordinated through the [production roadmap (#5)](https://github.com/xtreemze/TAXi/issues/5).
+
 ![TAXi gameplay loop](docs/gameplay-loop.svg)
 
 A fare is not automatically good. Longer rides usually pay more, but they consume more shift time, fuel and energy. Empty kilometers are pure operating cost. Rain raises fares but slows traffic; heat increases fatigue; rush hour reduces average speed. Late trips lose payout and rating. Better service increases the chance of tips and builds a streak bonus.
@@ -122,6 +124,7 @@ GitHub Pages serves the repository root directly. `.nojekyll` makes the static i
 ├── js/
 │   └── main.js
 ├── docs/
+│   ├── GAME-DESIGN.md      # production design authority and roadmap contract
 │   ├── preview.svg
 │   ├── gameplay-loop.svg
 │   └── screenshots/        # generated from the real game
