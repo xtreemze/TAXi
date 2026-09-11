@@ -19,19 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: Install isolated browser tooling
         run: |
           mkdir -p /tmp/taxi-capture docs/screenshots
           cd /tmp/taxi-capture
           npm init -y >/dev/null
-          npm install --save-exact playwright@1.55.0
+          npm install --ignore-scripts --no-package-lock --save-exact playwright@1.63.0
           npx playwright install --with-deps chromium
 
       - name: Serve static game
@@ -50,7 +50,7 @@ jobs:
             const browser = await chromium.launch({ headless: true });
 
             async function capture(name, viewport, waitMs) {
-              const context = await browser.newContext({ viewportSize: viewport, reducedMotion: 'reduce' });
+              const context = await browser.newContext({ viewport, reducedMotion: 'reduce' });
               const page = await context.newPage();
               await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle' });
               const start = page.getByRole('button', { name: /start shift|new week/i }).first();
