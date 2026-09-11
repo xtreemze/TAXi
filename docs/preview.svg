@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">TAXi Street Shift gameplay preview</title>
+  <desc id="desc">A yellow taxi drives through a stylized three dimensional city beneath a game status display.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3baee8"/><stop offset="1" stop-color="#d3f4ff"/></linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#202a35"/><stop offset=".5" stop-color="#394655"/><stop offset="1" stop-color="#202832"/></linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#14273c"/><stop offset="1" stop-color="#07111d"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-opacity=".26"/></filter>
+  </defs>
+  <rect width="1200" height="675" fill="#07101b"/>
+  <rect x="28" y="28" width="1144" height="619" rx="22" fill="url(#panel)" stroke="#2b3d50"/>
+  <rect x="52" y="52" width="816" height="571" rx="16" fill="url(#sky)"/>
+  <circle cx="735" cy="142" r="45" fill="#fff2a7" opacity=".9"/>
+  <g opacity=".6" fill="#4f6670">
+    <path d="M52 318h55v-81h47v81h58v-125h52v125h71v-60h46v60h66v-151h63v151h56v-93h68v93h58v-132h58v132h69v305H52z"/>
+  </g>
+  <g transform="translate(118 236) skewY(-2)">
+    <rect x="0" y="74" width="145" height="180" fill="#557f8e"/><rect x="145" y="74" width="38" height="180" fill="#35545f"/>
+    <g fill="#b9e7f0" opacity=".66"><path d="M18 96h22v22H18zm42 0h22v22H60zm42 0h22v22h-22zM18 137h22v22H18zm42 0h22v22H60zm42 0h22v22h-22zM18 178h22v22H18zm42 0h22v22H60zm42 0h22v22h-22z"/></g>
+    <rect x="226" y="30" width="155" height="224" fill="#a36d68"/><rect x="381" y="30" width="44" height="224" fill="#6f4744"/>
+    <g fill="#f3d3b0" opacity=".6"><path d="M245 56h27v24h-27zm48 0h27v24h-27zm48 0h27v24h-27zM245 100h27v24h-27zm48 0h27v24h-27zm48 0h27v24h-27zM245 144h27v24h-27zm48 0h27v24h-27zm48 0h27v24h-27z"/></g>
+    <rect x="471" y="92" width="142" height="162" fill="#6677a7"/><rect x="613" y="92" width="36" height="162" fill="#424c70"/>
+  </g>
+  <path d="M52 438L868 378V623H52z" fill="url(#road)"/>
+  <path d="M52 498L868 448" stroke="#ffe69a" stroke-width="9" stroke-dasharray="70 55" opacity=".9"/>
+  <g transform="translate(364 430)" filter="url(#shadow)">
+    <ellipse cx="150" cy="126" rx="135" ry="21" fill="#07101b" opacity=".35"/>
+    <path d="M24 56h223c25 0 43 15 46 41l3 27H13l3-43c2-15 4-22 8-25z" fill="#f3bd2d" stroke="#151b21" stroke-width="5"/>
+    <path d="M92 54l36-43h77l35 43z" fill="#f4cd3e" stroke="#151b21" stroke-width="5"/>
+    <path d="M126 18h32v31h-56zM164 18h39l27 31h-66z" fill="#75b9d3" stroke="#1d2730" stroke-width="3"/>
+    <rect x="143" y="-9" width="58" height="22" rx="5" fill="#151b21"/><text x="172" y="7" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="900" fill="#ffd84d">TAXI</text>
+    <circle cx="73" cy="124" r="31" fill="#161c22" stroke="#414d57" stroke-width="9"/><circle cx="73" cy="124" r="11" fill="#aab2b8"/>
+    <circle cx="235" cy="124" r="31" fill="#161c22" stroke="#414d57" stroke-width="9"/><circle cx="235" cy="124" r="11" fill="#aab2b8"/>
+  </g>
+  <g transform="translate(708 372)">
+    <circle cx="22" cy="28" r="14" fill="#a66f50"/><path d="M2 48c5-15 35-15 40 0v54H2z" fill="#9b6ca4"/><rect x="-20" y="108" width="92" height="51" rx="10" fill="#08131f" stroke="#385169"/><text x="-10" y="127" font-family="system-ui,sans-serif" font-size="12" font-weight="800" fill="#fff">AEROPUERTO</text><text x="-10" y="146" font-family="system-ui,sans-serif" font-size="11" fill="#a9b4c2">9.4 km</text><text x="58" y="146" text-anchor="end" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="#ffd84d">L 310</text>
+  </g>
+  <g font-family="system-ui,sans-serif">
+    <rect x="76" y="77" width="92" height="44" rx="5" fill="#ffd84d"/><text x="122" y="107" text-anchor="middle" font-size="24" font-weight="1000" fill="#111923">TAXi</text>
+    <text x="78" y="168" font-size="15" font-weight="800" letter-spacing="3" fill="#ffd84d">CLEAR STREETS · RUSH HOUR</text>
+    <text x="78" y="214" font-size="45" font-weight="900" letter-spacing="-2" fill="#fff">Choose your next fare</text>
+  </g>
+  <g transform="translate(890 64)" font-family="system-ui,sans-serif">
+    <text x="0" y="18" font-size="11" font-weight="800" letter-spacing="2" fill="#ffd84d">DISPATCH</text>
+    <text x="0" y="52" font-size="26" font-weight="850" fill="#fff">Street Shift</text>
+    <g transform="translate(0 82)">
+      <rect width="250" height="93" rx="12" fill="#ffffff" opacity=".045" stroke="#ffffff" stroke-opacity=".14"/>
+      <text x="16" y="27" font-size="11" fill="#a9b4c2">DAY 3 · 16:42</text><text x="16" y="55" font-size="22" font-weight="850" fill="#fff">L 1,840</text><text x="16" y="76" font-size="11" fill="#6ef1a7">4.2 ★ · 63% fuel</text>
+    </g>
+    <g transform="translate(0 196)">
+      <rect width="250" height="146" rx="12" fill="#ffffff" opacity=".045" stroke="#ffffff" stroke-opacity=".14"/>
+      <text x="16" y="25" font-size="10" fill="#a9b4c2">PASSENGER ABOARD</text><text x="16" y="56" font-size="22" font-weight="850" fill="#fff">Hospital</text><text x="228" y="56" text-anchor="end" font-size="13" font-weight="850" fill="#ffd84d">L 185</text>
+      <rect x="16" y="82" width="212" height="8" rx="4" fill="#ffffff" opacity=".1"/><rect x="16" y="82" width="137" height="8" rx="4" fill="#55d9ff"/>
+      <text x="16" y="116" font-size="11" fill="#a9b4c2">2.1 km left</text><text x="228" y="116" text-anchor="end" font-size="11" fill="#a9b4c2">18 min buffer</text>
+    </g>
+    <g transform="translate(0 365)">
+      <rect width="118" height="56" rx="11" fill="#ffd84d"/><text x="16" y="34" font-size="15" font-weight="850" fill="#111923">STOP</text>
+      <rect x="132" width="118" height="56" rx="11" fill="#ffffff" opacity=".06" stroke="#ffffff" stroke-opacity=".14"/><text x="148" y="34" font-size="15" font-weight="850" fill="#fff">DROP OFF</text>
+    </g>
+    <text x="0" y="474" font-size="11" fill="#a9b4c2">Static HTML · CSS 3D · Vanilla JS</text>
+  </g>
+</svg>
