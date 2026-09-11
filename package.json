@@ -4,6 +4,8 @@
   "private": true,
   "description": "A self-contained taxi survival-management browser game built with static HTML, CSS 3D transforms and vanilla JavaScript.",
   "scripts": {
+    "check": "node --check js/main.js",
+    "test": "npm run check",
     "serve": "python3 -m http.server 4173"
   },
   "repository": {
@@ -15,7 +17,9 @@
     "css-3d",
     "game-design",
     "github-pages",
-    "vanilla-javascript"
+    "static-site",
+    "vanilla-javascript",
+    "web-audio"
   ],
   "author": "Carlos Velasco",
   "license": "AGPL-3.0",
