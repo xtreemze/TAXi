@@ -38,58 +38,58 @@
     { id: 'heat', label: 'Heat', description: 'Heat — energy drains faster', speed: 0.96, fuel: 1.04, energy: 1.45, fare: 1.08 }
   ]);
 
-  const $ = (id) => document.getElementById(id);
+  const byId = (id) => document.getElementById(id);
   const dom = {
-    app: $('app'),
-    game: $('game'),
-    cityStrip: $('cityStrip'),
-    streetFurniture: $('streetFurniture'),
-    laneMarks: $('laneMarks'),
-    taxi: $('taxi'),
-    passengerLane: $('passengerLane'),
-    destinationMarker: $('destinationMarker'),
-    serviceSign: $('serviceSign'),
-    dayValue: $('dayValue'),
-    timeValue: $('timeValue'),
-    cashValue: $('cashValue'),
-    fuelValue: $('fuelValue'),
-    fuelBar: $('fuelBar'),
-    energyValue: $('energyValue'),
-    energyBar: $('energyBar'),
-    mealValue: $('mealValue'),
-    ratingValue: $('ratingValue'),
-    weatherValue: $('weatherValue'),
-    sceneTitle: $('sceneTitle'),
-    sceneMessage: $('sceneMessage'),
-    dispatchTitle: $('dispatchTitle'),
-    statusChip: $('statusChip'),
-    tripEmpty: $('tripEmpty'),
-    tripActive: $('tripActive'),
-    tripPassenger: $('tripPassenger'),
-    tripDestination: $('tripDestination'),
-    tripFare: $('tripFare'),
-    tripProgress: $('tripProgress'),
-    tripDistance: $('tripDistance'),
-    tripPatience: $('tripPatience'),
-    driveButton: $('driveButton'),
-    driveLabel: $('driveLabel'),
-    actionButton: $('actionButton'),
-    actionLabel: $('actionLabel'),
-    refuelButton: $('refuelButton'),
-    mealButton: $('mealButton'),
-    buyMealButton: $('buyMealButton'),
-    goalValue: $('goalValue'),
-    goalBar: $('goalBar'),
-    goalCopy: $('goalCopy'),
-    soundButton: $('soundButton'),
-    pauseButton: $('pauseButton'),
-    helpButton: $('helpButton'),
-    toastStack: $('toastStack'),
-    modalBackdrop: $('modalBackdrop'),
-    modalEyebrow: $('modalEyebrow'),
-    modalTitle: $('modalTitle'),
-    modalBody: $('modalBody'),
-    modalActions: $('modalActions')
+    app: byId('app'),
+    game: byId('game'),
+    cityStrip: byId('cityStrip'),
+    streetFurniture: byId('streetFurniture'),
+    laneMarks: byId('laneMarks'),
+    taxi: byId('taxi'),
+    passengerLane: byId('passengerLane'),
+    destinationMarker: byId('destinationMarker'),
+    serviceSign: byId('serviceSign'),
+    dayValue: byId('dayValue'),
+    timeValue: byId('timeValue'),
+    cashValue: byId('cashValue'),
+    fuelValue: byId('fuelValue'),
+    fuelBar: byId('fuelBar'),
+    energyValue: byId('energyValue'),
+    energyBar: byId('energyBar'),
+    mealValue: byId('mealValue'),
+    ratingValue: byId('ratingValue'),
+    weatherValue: byId('weatherValue'),
+    sceneTitle: byId('sceneTitle'),
+    sceneMessage: byId('sceneMessage'),
+    dispatchTitle: byId('dispatchTitle'),
+    statusChip: byId('statusChip'),
+    tripEmpty: byId('tripEmpty'),
+    tripActive: byId('tripActive'),
+    tripPassenger: byId('tripPassenger'),
+    tripDestination: byId('tripDestination'),
+    tripFare: byId('tripFare'),
+    tripProgress: byId('tripProgress'),
+    tripDistance: byId('tripDistance'),
+    tripPatience: byId('tripPatience'),
+    driveButton: byId('driveButton'),
+    driveLabel: byId('driveLabel'),
+    actionButton: byId('actionButton'),
+    actionLabel: byId('actionLabel'),
+    refuelButton: byId('refuelButton'),
+    mealButton: byId('mealButton'),
+    buyMealButton: byId('buyMealButton'),
+    goalValue: byId('goalValue'),
+    goalBar: byId('goalBar'),
+    goalCopy: byId('goalCopy'),
+    soundButton: byId('soundButton'),
+    pauseButton: byId('pauseButton'),
+    helpButton: byId('helpButton'),
+    toastStack: byId('toastStack'),
+    modalDialog: byId('modalDialog'),
+    modalEyebrow: byId('modalEyebrow'),
+    modalTitle: byId('modalTitle'),
+    modalBody: byId('modalBody'),
+    modalActions: byId('modalActions')
   };
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -750,7 +750,7 @@
     dom.ratingValue.textContent = `${state.rating.toFixed(1)} ★`;
     dom.weatherValue.textContent = `${weather.description}${trafficFactor() < 1 ? ' · rush hour' : ''}`;
     dom.goalValue.textContent = money(CONFIG.targetCash);
-    dom.goalBar.style.width = `${clamp((state.cash / CONFIG.targetCash) * 100, 0, 100)}%`;
+    dom.goalBar.value = clamp((state.cash / CONFIG.targetCash) * 100, 0, 100);
     dom.goalCopy.textContent = `Five shifts. ${state.totalFares} fares completed · score ${Math.round(state.score).toLocaleString('en-US')}.`;
 
     document.body.classList.toggle('weather-rain', weather.id === 'rain');
@@ -773,7 +773,7 @@
       dom.tripPassenger.textContent = trip.passenger;
       dom.tripDestination.textContent = trip.destination;
       dom.tripFare.textContent = `${money(trip.fare)} fare`;
-      dom.tripProgress.style.width = `${percent}%`;
+      dom.tripProgress.value = percent;
       dom.tripDistance.textContent = trip.arrived ? 'Destination reached' : `${remaining.toFixed(1)} km left`;
       const late = state.minute - trip.deadline;
       dom.tripPatience.textContent = late > 0 ? `${late} min late` : `${Math.max(0, trip.deadline - state.minute)} min buffer`;
@@ -790,7 +790,7 @@
     } else {
       dom.tripEmpty.hidden = false;
       dom.tripActive.hidden = true;
-      dom.tripProgress.style.width = '0%';
+      dom.tripProgress.value = 0;
       dom.destinationMarker.classList.remove('is-visible');
       dom.dispatchTitle.textContent = state.offers.length ? `${state.offers.length} fare${state.offers.length > 1 ? 's' : ''} waiting` : 'Looking for fares';
       dom.actionLabel.textContent = state.offers.length ? 'Pick best fare' : 'Pick a fare';
@@ -861,13 +861,23 @@
       button.addEventListener('click', descriptor.action);
       dom.modalActions.appendChild(button);
     });
-    dom.modalBackdrop.hidden = false;
+    if (!dom.modalDialog.open) dom.modalDialog.showModal();
     window.setTimeout(() => dom.modalActions.querySelector('button')?.focus(), 0);
   }
 
   function hideModal() {
-    dom.modalBackdrop.hidden = true;
+    if (dom.modalDialog.open) dom.modalDialog.close();
     dom.game.focus({ preventScroll: true });
+  }
+
+  function closeHelpModal() {
+    hideModal();
+    if (resumeAfterHelp) {
+      state.paused = false;
+      sound.setDriving(state.driving);
+    }
+    resumeAfterHelp = false;
+    render();
   }
 
   function openHelp() {
@@ -890,14 +900,7 @@
       {
         label: 'Close',
         primary: true,
-        action: () => {
-          hideModal();
-          if (resumeAfterHelp) {
-            state.paused = false;
-            sound.setDriving(state.driving);
-          }
-          render();
-        }
+        action: closeHelpModal
       }
     ]);
   }
@@ -954,11 +957,16 @@
     dom.pauseButton.addEventListener('click', togglePause);
     dom.helpButton.addEventListener('click', openHelp);
 
+    dom.modalDialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      if (state.mode === 'playing') closeHelpModal();
+    });
+
     window.addEventListener('keydown', (event) => {
       if (event.repeat) return;
       const target = event.target;
       if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
-      if (!dom.modalBackdrop.hidden && event.key !== 'Escape') return;
+      if (dom.modalDialog.open) return;
       if (event.code === 'Space') {
         event.preventDefault();
         toggleDrive();
@@ -976,13 +984,6 @@
         togglePause();
       } else if (event.key.toLowerCase() === 'h') {
         openHelp();
-      } else if (event.key === 'Escape' && !dom.modalBackdrop.hidden && state.mode === 'playing') {
-        hideModal();
-        if (resumeAfterHelp) {
-          state.paused = false;
-          sound.setDriving(state.driving);
-        }
-        render();
       }
     });
 
