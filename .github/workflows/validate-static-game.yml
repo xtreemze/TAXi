@@ -26,20 +26,45 @@ jobs:
           node <<'EOF'
           const fs = require('fs');
           const html = fs.readFileSync('index.html', 'utf8');
-          const required = ['css/main.css', 'js/main.js'];
+          const js = fs.readFileSync('js/main.js', 'utf8');
+          const styles = [
+            fs.readFileSync('css/main.css', 'utf8'),
+            fs.readFileSync('css/native-platform.css', 'utf8')
+          ].join('\n');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const required = ['css/main.css', 'css/native-platform.css', 'js/main.js'];
+
           for (const path of required) {
             if (!html.includes(path)) throw new Error(`index.html must reference ${path}`);
             if (!fs.existsSync(path)) throw new Error(`Missing ${path}`);
           }
+
           const externalScripts = [...html.matchAll(/<script[^>]+src=["'](https?:)?\/\//gi)];
           const externalStyles = [...html.matchAll(/<link[^>]+href=["'](https?:)?\/\//gi)];
           if (externalScripts.length || externalStyles.length) {
             throw new Error('Production game must not load external scripts or stylesheets.');
           }
-          const forbidden = ['jquery', 'gsap', 'howler'];
-          const runtime = `${html}\n${fs.readFileSync('css/main.css', 'utf8')}\n${fs.readFileSync('js/main.js', 'utf8')}`.toLowerCase();
-          for (const dependency of forbidden) {
+
+          if (Object.keys(pkg.dependencies || {}).length) {
+            throw new Error('Production dependencies are not allowed without an explicit architecture change.');
+          }
+
+          const runtime = `${html}\n${styles}\n${js}`.toLowerCase();
+          for (const dependency of ['jquery', 'gsap', 'howler']) {
             if (runtime.includes(dependency)) throw new Error(`Legacy runtime dependency detected: ${dependency}`);
+          }
+
+          if (!html.includes('<dialog') || html.includes('role="dialog"')) {
+            throw new Error('Modal UI must use the native <dialog> element.');
+          }
+          if ((html.match(/<progress\b/g) || []).length < 2) {
+            throw new Error('Trip and campaign progress must use native <progress> elements.');
+          }
+          if (/const\s+\$\s*=/.test(js)) {
+            throw new Error('Use explicit DOM helper names instead of a jQuery-shaped $ alias.');
+          }
+          if (!js.includes('.showModal()') || !js.includes('.close()')) {
+            throw new Error('Dialog lifecycle must use native showModal()/close().');
           }
           EOF
 
@@ -71,6 +96,11 @@ jobs:
             });
 
             await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle' });
+            const dialog = page.locator('#modalDialog');
+            if (!(await dialog.evaluate(node => node instanceof HTMLDialogElement && node.open))) {
+              throw new Error('Start menu did not open as a native modal dialog.');
+            }
+
             await page.getByRole('button', { name: /start shift|new week/i }).first().click();
             await page.waitForSelector('.fare', { timeout: 5000 });
             await page.locator('.fare').first().click();
@@ -79,6 +109,9 @@ jobs:
 
             if (await page.locator('#tripActive').isHidden()) throw new Error('Trip card did not become active.');
             if (!(await page.locator('#taxi').evaluate(node => node.classList.contains('is-driving')))) throw new Error('Taxi did not enter driving state.');
+            if (!(await page.locator('#tripProgress').evaluate(node => node instanceof HTMLProgressElement && node.value > 0))) {
+              throw new Error('Native trip progress did not advance.');
+            }
             if (errors.length) throw new Error(`Browser errors: ${errors.join(' | ')}`);
 
             await browser.close();

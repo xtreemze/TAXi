@@ -75,15 +75,18 @@ The stable vector hero (`docs/preview.svg`) is kept separately for repository/so
 
 ## Technical approach
 
-### Static by design
+### Native-first and static by design
 
-The production runtime is deliberately limited to three source files:
+The production runtime is deliberately small and has **zero production dependencies**:
 
-- `index.html` — semantic game shell, HUD, dispatch panel, modal surface and CSS-3D scene structure.
+- `index.html` — semantic game shell, HUD, dispatch panel, native dialog, native progress elements and CSS-3D scene structure.
 - `css/main.css` — responsive presentation, 3D building faces, perspective road, CSS taxi, passenger figures, weather states and reduced-motion behavior.
+- `css/native-platform.css` — focused styling for native browser primitives such as `<dialog>` and `<progress>`.
 - `js/main.js` — deterministic game state, fare generation, resource economy, day/campaign state machine, persistence, input and procedural sound.
 
-The legacy jQuery, GSAP, Howler, minified duplicates, tracked `node_modules`, sprite sources and prototype audio have been removed from the current tree. Git history remains the provenance record for the 2016 implementation, while the active repository contains only files relevant to the modern static game and its documentation/validation.
+Native browser capability is preferred whenever it is sufficient. Modal lifecycle, focus containment and Escape semantics use `HTMLDialogElement`; progress uses `HTMLProgressElement`; audio uses Web Audio; persistence uses Web Storage; DOM interaction uses standard event and element APIs. CI rejects production npm dependencies unless the architecture is deliberately changed.
+
+The legacy jQuery, GSAP, Howler, Modernizr, minified duplicates, tracked `node_modules`, sprite sources and prototype audio have been removed from the current tree. Git history remains the provenance record for the 2016 implementation, while the active repository contains only files relevant to the modern static game and its documentation/validation.
 
 ### CSS 3D instead of a renderer
 
@@ -99,13 +102,13 @@ Short interaction sounds and the driving hum use oscillators and gain envelopes 
 
 ### Responsive and accessible interaction
 
-The dispatch controls stay as ordinary buttons with visible focus states and keyboard equivalents. Game status is represented in text as well as color. Motion-heavy decoration respects `prefers-reduced-motion`, and the simulation automatically pauses when the page becomes hidden so background tabs do not consume a shift.
+The dispatch controls stay as ordinary buttons with visible focus states and keyboard equivalents. Game status is represented in text as well as color. The start/help/summary surfaces use native modal-dialog semantics, and trip/campaign completion expose native progress semantics. Motion-heavy decoration respects `prefers-reduced-motion`, and the simulation automatically pauses when the page becomes hidden so background tabs do not consume a shift.
 
 ## GitHub Pages and validation
 
 GitHub Pages serves the repository root directly. `.nojekyll` makes the static intent explicit; there is no compiled `dist/` directory to drift from source.
 
-`.github/workflows/validate-static-game.yml` syntax-checks the vanilla JavaScript, enforces the dependency-free production contract, and runs the real game loop in Chromium. `.github/workflows/capture-gameplay.yml` launches Chromium against the same static root and refreshes the README screenshots. Browser tooling is installed only inside CI and is not part of the game runtime.
+`.github/workflows/validate-static-game.yml` syntax-checks the vanilla JavaScript, enforces the native-first zero-production-dependency contract, and runs the real game loop in Chromium. `.github/workflows/capture-gameplay.yml` launches Chromium against the same static root and refreshes the README screenshots. Playwright and Node are CI tooling only; neither is part of the shipped game.
 
 ## Project structure
 
@@ -114,7 +117,8 @@ GitHub Pages serves the repository root directly. `.nojekyll` makes the static i
 ├── index.html
 ├── 404.html
 ├── css/
-│   └── main.css
+│   ├── main.css
+│   └── native-platform.css
 ├── js/
 │   └── main.js
 ├── docs/
@@ -135,9 +139,10 @@ GitHub Pages serves the repository root directly. `.nojekyll` makes the static i
 1. **Every action should touch the economy.** Driving, waiting, recovering and buying supplies all trade against time or cash.
 2. **The street should communicate opportunity.** Available passengers are visible in-world, not hidden behind a menu.
 3. **Movement should feel physical without needing a game engine.** Perspective, depth, wheel motion and parallax remain core to TAXi's identity.
-4. **Consequences should be readable.** Deadlines, trip progress, resource bars, service prices and nightly cost are visible before the player commits.
-5. **Runs should be recoverable but not consequence-free.** Emergency fuel prevents an accidental soft lock, but costs enough time/cash/rating to matter.
-6. **The build should remain archival and portable.** A future browser can host the repository as ordinary static files without reconstructing an old package ecosystem.
+4. **Prefer the platform before a dependency.** Use mature browser primitives for dialogs, progress, audio, storage, layout and interaction before introducing libraries.
+5. **Consequences should be readable.** Deadlines, trip progress, resource bars, service prices and nightly cost are visible before the player commits.
+6. **Runs should be recoverable but not consequence-free.** Emergency fuel prevents an accidental soft lock, but costs enough time/cash/rating to matter.
+7. **The build should remain archival and portable.** A future browser can host the repository as ordinary static files without reconstructing an old package ecosystem.
 
 ## License
 
